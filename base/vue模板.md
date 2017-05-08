@@ -1,16 +1,19 @@
-// html模板:
-  //基于dom的模板, 模板都是可解析的有效的html
 
-//插值
-  //文本:使用"Mustache"语法, 双大括号 {{value}}
-        //作用: 替换实例上的属性值, 当值改变时,  插值内容会自动更新
-  //原生的HTML: 双大括号输出的是文本, 不会解析html,如果希望解析成html 则需要使用 v-html="html"
-  // 属性: 使用v-bind进行绑定, 可以响应变化  v-bind:custom="data"
-  //使用javascript 表达式, 写简单的表达式,三目运算等等
+# 模板 #
+## html模板: #
+>基于dom的模板, 模板都是可解析的有效的html
+
+  ### 插值 #
+  文本:使用"Mustache"语法, 双大括号 {{value}} <br>
+  作用: 替换实例上的属性值, 当值改变时,  插值内容会自动更新 <br>
+  原生的HTML: 双大括号输出的是文本, 不会解析html,如果希望解析成html 则需要使用 v-html="html" <br>
+   属性: 使用v-bind进行绑定, 可以响应变化  v-bind:custom="data" <br>
+  使用javascript 表达式, 写简单的表达式,三目运算等等  <br>
 
 
-//字符串模板:
-  //有些时候是需要动态的拼写字符串
+## 字符串模板: #
+> 有些时候是需要动态的拼写字符串
+```
   var abc = 5;
   var str = "<div>hello{{abc}}</div>"  //注意;这里的根元素必须只有一个
   var vm = new Vue({
@@ -18,16 +21,19 @@
     data:obj,
     template: str  //使用这个属性, 就把挂载点下的内容替换为该字符串
   })
+```
+> 还可以使用script片段
+```
+    <script type="x-template" id="temp">
+       <div>hello{abc}</div>
+    </script>
+```
+在template中, 替换为 #temp , 会自动找到该片段,有局限, 不能跨文件复用
 
-  //还可以使用script片段
-    //<script type="x-template" id="temp">
-       //<div>hello{abc}</div>
-    //</script>
-  //在template中, 替换为 #temp , 会自动找到该片段,有局限, 不能跨文件复用
 
-
-  //render 函数:
-    //接近编译器的语法, html和字符串模板都会编译为render函数.
+## render 函数: #
+>接近编译器的语法, html和字符串模板都会编译为render函数.
+```
     var vm = new Vue({
     el:"#demo",
     data:obj,
@@ -51,5 +57,5 @@
       )
     }
   })
-
+```
 
