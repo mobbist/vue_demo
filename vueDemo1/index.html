@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+<script type="text/javascript" src="./js/vue.js"></script>
+<style>
+  .checkboxState{ color:#aaa}
+</style>
+</head>
+<body>
+   <div class="container" id="list" >
+      添加任务:
+      <div class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+          <div class="input-group" >
+            <!-- vue 事件修饰符, 事件需要穿餐并且还需要获取event对象-->
+            <input v-model="todo" type="text" class="form-control" id="exampleInputAmount" placeholder="请输入" v-on:keyup.enter="add(123,$event)"  />
+            <div  class="input-group-addon">添加</div>
+      </div>
+</div>
+     </div>
+     任务列表:
+      <ul class="list-group" >
+        <li v-show="!list.length" class="list-group-item" >您还没有添加任何任务</li>
+        <li v-for="item in list"class="list-group-item" :class="{checkboxState:item.checkbox}"><input type="checkbox" v-model="item.checkbox" />{{item.checkbox?"已完成":"未完成"}} {{item.name}} <span @click="deleteItem(item)">删除</span></li>
+      </ul>
+  </div>
+</body>
+<script type="text/javascript">
+  // 数据  M
+  let obj = {
+    message :"hello",
+    
+    todo:"",
+    list:[
+    ]
+  }
+  let vm = new Vue({
+    el:"#list",
+    data:obj,
+    methods:{
+      add(data,ev){
+          // vue 是以数据来驱动视图, 所以不操作dom 尽量不操作dom, 不需要去从一个元素上去值, 可以用一个变量来跟踪变化, 当push的时候,将这个变量push进去
+          //this.list.push({name:ev.target.value})
+          //ev.target.value = "";
+
+          //使用v-model="todo"来监听input框的变化, 在添加的时候, push这个值, 
+          this.list.push({name:this.todo,checkbox:false});
+          this.todo = "" 
+      },
+      deleteItem(item){
+        
+        var index = this.list.indexOf(item);
+        console.log(index);
+        if(index >-1){
+          this.list.splice(index,1);
+        }
+      }
+    }
+  })
+
+</script>
+</html>
