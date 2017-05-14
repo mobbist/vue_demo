@@ -8,6 +8,9 @@
 <script type="text/javascript" src="./js/vue.js"></script>
 <style>
   .checkboxState{ color:#aaa}
+  .editBox{ display: none}
+  .editing .valueBox{ display: none}
+  .editing .editBox{ display: block}
 </style>
 </head>
 <body>
@@ -19,23 +22,32 @@
           <div class="input-group" >
             <!-- vue 事件修饰符, 事件需要穿餐并且还需要获取event对象-->
             <input v-model="todo" type="text" class="form-control" id="exampleInputAmount" placeholder="请输入" v-on:keyup.enter="add(123,$event)"  />
-            <div  class="input-group-addon">添加</div>
-      </div>
-</div>
+            <div  class="input-group-addon" @click="add">添加</div>
+          </div>
+    </div>
      </div>
-     任务列表:
+    <div>任务列表:</div>
       <ul class="list-group" >
-        <li v-show="!list.length" class="list-group-item" >您还没有添加任何任务</li>
-        <li v-for="item in list"class="list-group-item" :class="{checkboxState:item.checkbox}"><input type="checkbox" v-model="item.checkbox" />{{item.checkbox?"已完成":"未完成"}} {{item.name}} <span @click="deleteItem(item)">删除</span></li>
+        <li v-show="!list.length" class="list-group-item" >您还没有添加任何任务1</li>
+        <li  v-for="item in list"class="list-group-item" :class="{checkboxState:item.checkbox,editing: item === editorItem }"    >
+          <div class="valueBox">
+            <input type="checkbox"  v-model="item.checkbox" />{{item.checkbox?"已完成":"未完成"}} {{item.name}}<span @click="itemEdit(item)">编辑</span><span @click="deleteItem(item)">删除</span>
+          </div>
+          <div class="editBox">
+            <input v-model="item.name" @blur="editSub(item)"   />
+          </div>
+        </li>
+          
       </ul>
+      
   </div>
 </body>
 <script type="text/javascript">
   // 数据  M
   let obj = {
-    message :"hello",
     
-    todo:"",
+    todo:"",  //正在输入框内的数据
+    editorItem:"",   //使用一个全局的值来记录正在编辑的数据，初始为空
     list:[
     ]
   }
@@ -43,6 +55,7 @@
     el:"#list",
     data:obj,
     methods:{
+      //添加事件
       add(data,ev){
           // vue 是以数据来驱动视图, 所以不操作dom 尽量不操作dom, 不需要去从一个元素上去值, 可以用一个变量来跟踪变化, 当push的时候,将这个变量push进去
           //this.list.push({name:ev.target.value})
@@ -52,14 +65,29 @@
           this.list.push({name:this.todo,checkbox:false});
           this.todo = "" 
       },
+      //删除事件
       deleteItem(item){
         
         var index = this.list.indexOf(item);
-        console.log(index);
         if(index >-1){
           this.list.splice(index,1);
         }
+      },
+      //编辑事件
+      itemEdit(item){
+        console.log(item);
+
+        //使用数据驱动试图来实现：
+        //当点击编辑按钮的时候， 将这条数据复制给这个属性， 
+        this.editorItem = item;
+        //触发重新渲染时class上的条件判断 当前的这个item正是editor的ITEM,则渲染class ,class的样式又会去控制div的隐藏和input的展示
+        
+      },
+      editSub(item){
+        console.log(item);
+        this.editorItem = "";
       }
+
     }
   })
 
